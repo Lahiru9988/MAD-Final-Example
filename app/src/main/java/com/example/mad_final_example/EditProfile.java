@@ -89,5 +89,14 @@ public class EditProfile extends AppCompatActivity {
         });
         //Delete User
 
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DBHandler dbHandler =new DBHandler(getApplicationContext());
+                dbHandler.deleteInfo(username.getText().toString());
+                Toast.makeText(EditProfile.this,"Deleted",Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }
