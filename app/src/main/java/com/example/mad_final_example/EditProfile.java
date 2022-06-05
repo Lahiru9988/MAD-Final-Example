@@ -64,8 +64,29 @@ public class EditProfile extends AppCompatActivity {
             }
         });
 
-        
+
         //Edit User
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (male.isChecked()){
+                    gender="male";
+                }
+                else{
+                    gender ="female";
+                }
+               DBHandler dbHandler =new DBHandler(getApplicationContext());
+
+                Boolean status =dbHandler.updateInfo(username.getText().toString(),dob.getText().toString(),password.getText().toString(),gender);
+                if (status){
+                    Toast.makeText(EditProfile.this,"Updated",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(EditProfile.this,"Fail",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         //Delete User
 
     }
