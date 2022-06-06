@@ -203,5 +203,47 @@ public class DBHandler extends SQLiteOpenHelper {
         return userInfo;
     }
 
+    public Boolean loginUser(String username,String password) {
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                BaseColumns._ID,
+                UserProfile.Users.COLUMN_1,
+                UserProfile.Users.COLUMN_3,
+        };
+
+        // Filter results WHERE "title" = 'My Title'
+        String selection = UserProfile.Users.COLUMN_1 + " = ?AND" + UserProfile.Users.COLUMN_3 +"= ?";
+        String[] selectionArgs = {username, password};
+
+        // How you want the results sorted in the resulting Cursor
+        String sortOrder =
+                UserProfile.Users.COLUMN_1 + " DESC";
+
+        Cursor cursor = db.query(
+                UserProfile.Users.TABLE_NAME,   // The table to query
+                projection,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,            // don't group the rows
+                null,             // don't filter by row groups
+                sortOrder               // The sort order
+        );
+
+        String validUser =null;
+        while(cursor.moveToNext()) {
+            validUser =Cursor.getString(cursor.getColumnIndexOrThrow(UserProfile.Users.COLUMN_1));
+        }
+        cursor.close();
+        if(validUser.isEmpty()){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
 }
 
