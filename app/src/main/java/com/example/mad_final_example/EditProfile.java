@@ -83,7 +83,7 @@ public class EditProfile extends AppCompatActivity {
                     Toast.makeText(EditProfile.this,"Updated",Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Toast.makeText(EditProfile.this,"Fail",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditProfile.this,"Failed",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -95,6 +95,13 @@ public class EditProfile extends AppCompatActivity {
                 DBHandler dbHandler =new DBHandler(getApplicationContext());
                 dbHandler.deleteInfo(username.getText().toString());
                 Toast.makeText(EditProfile.this,"Deleted",Toast.LENGTH_SHORT).show();
+
+                username.setText(null);
+                dob.setText(null);
+                password.setText(null);
+                male.setChecked(false);
+                female.setChecked(false);
+
             }
         });
 

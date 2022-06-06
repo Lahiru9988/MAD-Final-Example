@@ -2,9 +2,22 @@ package com.example.mad_final_example;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.Toast;
+
+import com.example.mad_final_example.Database.DBHandler;
 
 public class ProfileManagement extends AppCompatActivity {
+
+       EditText username,dob,password;
+       Button add,updateProfile;
+       RadioButton male,female;
+       String gender;
 
 
 
@@ -12,5 +25,45 @@ public class ProfileManagement extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_management);
+
+        username =findViewById(R.id.etUserNamePM);
+        dob =findViewById(R.id.etDobPM);
+        password =findViewById(R.id.etPasswordPM);
+        add =findViewById(R.id.btnAddPM);
+        updateProfile =findViewById(R.id.btnUpdateProfilePM);
+        male =findViewById(R.id.radioButtonPM);
+        female =findViewById(R.id.radioButton2PM);
+
+          //update profile
+
+        updateProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i =  new Intent(getApplicationContext(),EditProfile.class);
+                startActivity(i);
+            }
+        });
+
+         // add member
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(male.isChecked()) {
+                    gender = "Male";
+                }
+                else{
+                    gender ="Female";
+                }
+                DBHandler dbHandler = new DBHandler(getApplicationContext());
+                long newID =dbHandler.addInfo(username.getText().toString(),dob.getText().toString(),password.getText().toString(),gender);
+                Toast.makeText(ProfileManagement.this, "user added. User ID:"+newID,Toast.LENGTH_SHORT).show();
+
+                Intent i =  new Intent(getApplicationContext(),EditProfile.class);
+                startActivity(i);
+
+
+            }
+        });
     }
 }
