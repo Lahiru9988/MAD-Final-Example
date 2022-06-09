@@ -19,15 +19,18 @@ public class DBHandler extends SQLiteOpenHelper {
     public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_ENTRIES);
     }
+
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
         db.execSQL(SQL_DELETE_ENTRIES);
         onCreate(db);
     }
+
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
@@ -35,9 +38,9 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + UserProfile.Users.TABLE_NAME + " (" +
                     UserProfile.Users._ID + " INTEGER PRIMARY KEY," +
-                    UserProfile.Users.COLUMN_1 + " TEXT,"+
-                    UserProfile.Users.COLUMN_2 + " TEXT,"+
-                    UserProfile.Users.COLUMN_3 + " TEXT,"+
+                    UserProfile.Users.COLUMN_1 + " TEXT," +
+                    UserProfile.Users.COLUMN_2 + " TEXT," +
+                    UserProfile.Users.COLUMN_3 + " TEXT," +
                     UserProfile.Users.COLUMN_4 + " TEXT)";
 
     private static final String SQL_DELETE_ENTRIES =
@@ -46,7 +49,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     //insert data
 
-    public long addInfo(String username,String dob,String password,String gender) {
+    public long addInfo(String username, String dob, String password, String gender) {
         // Gets the data repository in write mode
         SQLiteDatabase db = getWritableDatabase();
 
@@ -65,7 +68,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     //Update data
-    public Boolean updateInfo(String username, String dob  ,String password ,String gender){
+    public Boolean updateInfo(String username, String dob, String password, String gender) {
         SQLiteDatabase db = getWritableDatabase();
 
         // New value for one column
@@ -77,7 +80,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         // Which row to update, based on the title
         String selection = UserProfile.Users.COLUMN_1 + " LIKE ?";
-        String[] selectionArgs = { "MyOldTitle" };
+        String[] selectionArgs = {"MyOldTitle"};
 
         int count = db.update(
                 UserProfile.Users.TABLE_NAME,
@@ -85,10 +88,9 @@ public class DBHandler extends SQLiteOpenHelper {
                 selection,
                 selectionArgs);
 
-        if (count>=1){
+        if (count >= 1) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
 
@@ -96,13 +98,13 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
     // delete data
-    public void deleteInfo(String username){
+    public void deleteInfo(String username) {
         SQLiteDatabase db = getWritableDatabase();
 
         // Define 'where' part of query.
         String selection = UserProfile.Users.COLUMN_1 + " LIKE ?";
         // Specify arguments in placeholder order.
-        String[] selectionArgs = { "username" };
+        String[] selectionArgs = {"username"};
         // Issue SQL statement.
         int deletedRows = db.delete(UserProfile.Users.TABLE_NAME, selection, selectionArgs);
 
@@ -111,9 +113,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
     //All Information
-    public List readAllInfo(){
+    public List readAllInfo() {
 
-        SQLiteDatabase db =getReadableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
 
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
@@ -126,8 +128,8 @@ public class DBHandler extends SQLiteOpenHelper {
         };
 
         // Filter results WHERE "title" = 'My Title'
-        String selection =UserProfile.Users.COLUMN_1 + " = ?";
-        String[] selectionArgs = { "username" };
+        String selection = UserProfile.Users.COLUMN_1 + " = ?";
+        String[] selectionArgs = {"username"};
 
         // How you want the results sorted in the resulting Cursor
         String sortOrder =
@@ -145,7 +147,7 @@ public class DBHandler extends SQLiteOpenHelper {
         );
 
         List username = new ArrayList<>();
-        while(cursor.moveToNext()) {
+        while (cursor.moveToNext()) {
             long user = cursor.getLong(
                     cursor.getColumnIndexOrThrow(UserProfile.Users._ID));
             username.add(username);
@@ -155,9 +157,8 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
 
-
-    public List readAllInfo(String username){
-        SQLiteDatabase db =getReadableDatabase();
+    public List readAllInfo(String username) {
+        SQLiteDatabase db = getReadableDatabase();
 
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
@@ -170,8 +171,8 @@ public class DBHandler extends SQLiteOpenHelper {
         };
 
         // Filter results WHERE "title" = 'My Title'
-        String selection =UserProfile.Users.COLUMN_1 + " = LIKE";
-        String[] selectionArgs = { username};
+        String selection = UserProfile.Users.COLUMN_1 + " = LIKE";
+        String[] selectionArgs = {username};
 
         // How you want the results sorted in the resulting Cursor
         String sortOrder =
@@ -189,7 +190,7 @@ public class DBHandler extends SQLiteOpenHelper {
         );
 
         List userInfo = new ArrayList<>();
-        while(cursor.moveToNext()) {
+        while (cursor.moveToNext()) {
             String user = cursor.getString(cursor.getColumnIndexOrThrow(UserProfile.Users.COLUMN_1));
             String dob = cursor.getString(cursor.getColumnIndexOrThrow(UserProfile.Users.COLUMN_2));
             String pass = cursor.getString(cursor.getColumnIndexOrThrow(UserProfile.Users.COLUMN_3));
@@ -203,7 +204,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return userInfo;
     }
 
-    public Boolean loginUser(String username,String password) {
+    public Boolean loginUser(String username, String password) {
 
         SQLiteDatabase db = getReadableDatabase();
 
@@ -216,7 +217,7 @@ public class DBHandler extends SQLiteOpenHelper {
         };
 
         // Filter results WHERE "title" = 'My Title'
-        String selection = UserProfile.Users.COLUMN_1 + " = ?AND" + UserProfile.Users.COLUMN_3 +"= ?";
+        String selection = UserProfile.Users.COLUMN_1 + " = ?AND" + UserProfile.Users.COLUMN_3 + "= ?";
         String[] selectionArgs = {username, password};
 
         // How you want the results sorted in the resulting Cursor
@@ -233,17 +234,29 @@ public class DBHandler extends SQLiteOpenHelper {
                 sortOrder               // The sort order
         );
 
-        String validUser =null;
+        String validUser = null;
         while(cursor.moveToNext()) {
-            validUser =Cursor.getString(cursor.getColumnIndexOrThrow(UserProfile.Users.COLUMN_1));
+            validUser = cursor.getString(cursor.getColumnIndexOrThrow(UserProfile.Users.COLUMN_1));
+
         }
         cursor.close();
         if(validUser.isEmpty()){
             return false;
+
         }
-        else {
+        else{
             return true;
         }
+
     }
 }
+
+
+
+
+
+
+
+
+
 
