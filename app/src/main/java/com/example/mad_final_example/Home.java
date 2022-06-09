@@ -49,6 +49,8 @@ public class Home extends AppCompatActivity {
                     startActivity(i);
                 } else {
                     Toast.makeText(Home.this, "No user or Invalid User Details", Toast.LENGTH_SHORT).show();
+                    username.setText(null);
+                    password.setText(null);
                 }
             }
         });

@@ -233,21 +233,17 @@ public class DBHandler extends SQLiteOpenHelper {
                 null,             // don't filter by row groups
                 sortOrder               // The sort order
         );
-
-        String validUser = null;
-        while(cursor.moveToNext()) {
-            validUser = cursor.getString(cursor.getColumnIndexOrThrow(UserProfile.Users.COLUMN_1));
-
+         List validUser = new ArrayList()){
+             String user = cursor.getString(cursor.getColumnIndexOrThrow(UserProfile.Users.COLUMN_1));
+             validUser.add(user);
         }
         cursor.close();
-        if(validUser.isEmpty()){
+        if (validUser.isEmpty()){
             return false;
-
         }
         else{
             return true;
         }
-
     }
 }
 
